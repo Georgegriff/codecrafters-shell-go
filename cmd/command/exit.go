@@ -17,3 +17,7 @@ func (e Exit) Run(args []string) {
 		os.Exit(1)
 	}
 }
+
+func (e Exit) String() string {
+	return string(EXIT)
+}
