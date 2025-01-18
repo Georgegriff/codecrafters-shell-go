@@ -14,6 +14,7 @@ type CommandType string
 
 const (
 	EXIT CommandType = "exit"
+	ECHO CommandType = "echo"
 )
 
 func ExecuteCommandInput(commandInput string) {
@@ -33,6 +34,8 @@ func getCommand(commandType CommandType, arguments []string) (Command, error) {
 	switch commandType {
 	case EXIT:
 		return Exit{}, nil
+	case ECHO:
+		return Echo{}, nil
 	default:
 		return nil, fmt.Errorf("%s: command not found", strings.Join(append([]string{string(commandType)}, arguments...), " "))
 	}
