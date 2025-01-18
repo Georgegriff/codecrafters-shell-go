@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/codecrafters-io/shell-starter-go/cmd/command"
 )
 
 func main() {
@@ -18,11 +20,8 @@ func main() {
 			os.Exit(1)
 		}
 		trimmedInput := strings.TrimSuffix(commandInput, "\n")
-		handleInput(trimmedInput)
+		command.ExecuteCommandInput(trimmedInput)
+
 		fmt.Fprintln(os.Stdout)
 	}
-}
-
-func handleInput(command string) {
-	fmt.Fprintf(os.Stdout, "%s: command not found", command)
 }
