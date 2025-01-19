@@ -16,7 +16,7 @@ func (u UserDefined) CommandType() CommandType {
 }
 
 func (u UserDefined) Run(args []string) {
-	cmd := exec.Command(u.Path, args...)
+	cmd := exec.Command(u.Name, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
