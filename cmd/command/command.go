@@ -9,6 +9,18 @@ import (
 type Command interface {
 	Run(args []string)
 	String() string
+	CommandType() CommandType
+}
+
+type BaseCommand struct {
+}
+
+func (g BaseCommand) CommandType() CommandType {
+	return CommandType("")
+}
+
+func (g BaseCommand) String() string {
+	return string(g.CommandType())
 }
 
 func ExecuteCommandInput(commandInput string) {

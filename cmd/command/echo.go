@@ -7,12 +7,13 @@ import (
 )
 
 type Echo struct {
+	BaseCommand
+}
+
+func (e Echo) CommandType() CommandType {
+	return ECHO
 }
 
 func (e Echo) Run(args []string) {
 	fmt.Fprint(os.Stdout, strings.Join(args, " "))
-}
-
-func (e Echo) String() string {
-	return string(ECHO)
 }
