@@ -3,6 +3,8 @@ package command
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/utils"
 )
@@ -23,18 +25,23 @@ func (c Cd) Run(args []string) {
 	if len(args) >= 1 {
 		path = args[0]
 	}
-	if path != "" {
-		if !utils.DirExists(path) {
-			fmt.Fprintf(os.Stdout, "cd: %s: No such file or directory\n", path)
-			return
+	if path == "" {
+		path = utils.GetHomeDir()
+	}
+	if strings.HasPrefix(path, "~") {
+		after, found := strings.CutPrefix(path, "~")
+		if found {
+			path = filepath.Join(utils.GetHomeDir(), after)
 		}
-
-		err := os.Chdir(path)
-		if err != nil {
-			fmt.Fprint(os.Stderr, err.Error())
-		}
+	}
+	if !utils.DirExists(path) {
+		fmt.Fprintf(os.Stdout, "cd: %s: No such file or directory\n", path)
 		return
 	}
-	// todo handle "" go to home
+
+	err := os.Chdir(path)
+	if err != nil {
+		fmt.Fprint(os.Stderr, err.Error())
+	}
 
 }
