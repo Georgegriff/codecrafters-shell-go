@@ -19,7 +19,7 @@ func ExecuteCommandInput(commandInput string) {
 	command, err := GetCommand(CommandType(commandType))
 	if err != nil {
 		notFoundError := fmt.Errorf("%s: command not found", strings.Join(append([]string{string(commandType)}, arguments...), " "))
-		fmt.Fprint(os.Stdout, notFoundError)
+		fmt.Fprint(os.Stdout, notFoundError, "\n")
 		return
 	}
 	command.Run(arguments)

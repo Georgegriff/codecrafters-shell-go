@@ -23,7 +23,7 @@ func (t Type) Run(args []string) {
 	}
 	command, err := GetCommand(CommandType(lookUpCommand))
 	if err != nil {
-		fmt.Fprint(os.Stderr, err.Error())
+		fmt.Fprint(os.Stderr, err.Error(), "\n")
 		return
 	}
 	userDefined, isUserDefined := command.(UserDefined)
