@@ -7,12 +7,11 @@ import (
 )
 
 func TestParseArgs(t *testing.T) {
-	args := parseArgs(`cat 'file1.go' file2.go 'file3.go' file`)
-	testutils.ExpectToMatchInt(t, len(args), 5)
-	testutils.ExpectToMatchString(t, args[0], "cat")
-	testutils.ExpectToMatchString(t, args[1], "file1.go")
-	testutils.ExpectToMatchString(t, args[2], "file2.go")
-	testutils.ExpectToMatchString(t, args[3], "file3.go")
-	testutils.ExpectToMatchString(t, args[4], "file")
+	command, args := parseArgs(`cat "/tmp/qux/f\n42" "/tmp/qux/f\78" "/tmp/qux/f'\'36"`)
+	testutils.ExpectToMatchString(t, command, "cat")
+	testutils.ExpectToMatchInt(t, len(args), 3)
+	testutils.ExpectToMatchString(t, args[0], "/tmp/qux/f\\n42")
+	testutils.ExpectToMatchString(t, args[1], `/tmp/qux/f\78`)
+	testutils.ExpectToMatchString(t, args[2], `/tmp/qux/f'\'36`)
 
 }

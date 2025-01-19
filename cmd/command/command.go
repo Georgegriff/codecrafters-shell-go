@@ -3,9 +3,8 @@ package command
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
-
-	"github.com/mattn/go-shellwords"
 )
 
 type Command interface {
@@ -15,9 +14,8 @@ type Command interface {
 }
 
 func ExecuteCommandInput(commandInput string) {
-	commandParts := parseArgs(commandInput)
+	commandType, arguments := parseArgs(commandInput)
 
-	commandType, arguments := commandParts[0], commandParts[1:]
 	command, err := GetCommand(CommandType(commandType))
 	if err != nil {
 		notFoundError := fmt.Errorf("%s: command not found", strings.Join(append([]string{string(commandType)}, arguments...), " "))
@@ -28,12 +26,34 @@ func ExecuteCommandInput(commandInput string) {
 
 }
 
-func parseArgs(input string) []string {
+// Horrible had to borrow this
+func parseArgs(input string) (string, []string) {
 
-	p := shellwords.NewParser()
-	p.ParseBacktick = true
+	var args []string
+	command, argstr, _ := strings.Cut(input, " ")
+	if strings.Contains(input, "\"") {
+		re := regexp.MustCompile("\"(.*?)\"")
+		args = re.FindAllString(input, -1)
+		for i := range args {
+			args[i] = strings.Trim(args[i], "\"")
+		}
+	} else if strings.Contains(input, "'") {
+		re := regexp.MustCompile("'(.*?)'")
+		args = re.FindAllString(input, -1)
+		for i := range args {
+			args[i] = strings.Trim(args[i], "'")
+		}
+	} else {
+		if strings.Contains(argstr, "\\") {
+			re := regexp.MustCompile(`[^\\] +`)
+			args = re.Split(argstr, -1)
+			for i := range args {
+				args[i] = strings.ReplaceAll(args[i], "\\", "")
+			}
+		} else {
+			args = strings.Fields(argstr)
+		}
+	}
 
-	args, _ := p.Parse(input)
-
-	return args
+	return command, args
 }
