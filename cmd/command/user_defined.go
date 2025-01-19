@@ -1,5 +1,11 @@
 package command
 
+import (
+	"fmt"
+	"os"
+	"os/exec"
+)
+
 type UserDefined struct {
 	Name string
 	Path string
@@ -10,7 +16,12 @@ func (u UserDefined) CommandType() CommandType {
 }
 
 func (u UserDefined) Run(args []string) {
-
+	cmd := exec.Command(u.Path, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		fmt.Fprint(os.Stderr, err.Error())
+	}
 }
 
 func (u UserDefined) String() string {
