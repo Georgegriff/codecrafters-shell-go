@@ -3,8 +3,8 @@ package command
 import (
 	"fmt"
 	"os"
-	"regexp"
 	"strings"
+	"unicode"
 )
 
 type Command interface {
@@ -26,34 +26,56 @@ func ExecuteCommandInput(commandInput string) {
 
 }
 
-// Horrible had to borrow this
 func parseArgs(s string) (string, []string) {
+	var result []string
+	var current []rune
+	var quote rune
+	var nestedQuote rune
+	escaped := false
 
-	var args []string
-	command, argstr, _ := strings.Cut(s, " ")
-	if strings.Contains(s, "\"") {
-		re := regexp.MustCompile("\"(.*?)\"")
-		args = re.FindAllString(s, -1)
-		for i := range args {
-			args[i] = strings.Trim(args[i], "\"")
-		}
-	} else if strings.Contains(s, "'") {
-		re := regexp.MustCompile("'(.*?)'")
-		args = re.FindAllString(s, -1)
-		for i := range args {
-			args[i] = strings.Trim(args[i], "'")
-		}
-	} else {
-		if strings.Contains(argstr, "\\") {
-			re := regexp.MustCompile(`[^\\] +`)
-			args = re.Split(argstr, -1)
-			for i := range args {
-				args[i] = strings.ReplaceAll(args[i], "\\", "")
+	for i, r := range s {
+		switch {
+		case escaped:
+			current = append(current, r)
+			escaped = false
+		case r == '\\':
+			if nestedQuote != '\'' && quote != '\'' {
+				if quote == 0 || (quote != 0 && (s[i+1] == '"' || s[i+1] == '\\' || s[i+1] == '$')) {
+					escaped = true
+				} else {
+					current = append(current, r)
+				}
+			} else {
+				current = append(current, r)
 			}
-		} else {
-			args = strings.Fields(argstr)
+		case quote != 0:
+			if r == quote {
+				quote = 0
+			} else {
+				if r == '"' || r == '\'' {
+					if nestedQuote == r {
+						nestedQuote = 0
+					} else {
+						nestedQuote = r
+					}
+				}
+				current = append(current, r)
+			}
+		case r == '"' || r == '\'':
+			quote = r
+		case unicode.IsSpace(r):
+			if len(current) > 0 {
+				result = append(result, string(current))
+				current = nil
+			}
+		default:
+			current = append(current, r)
 		}
 	}
 
-	return command, args
+	if len(current) > 0 {
+		result = append(result, string(current))
+	}
+
+	return result[0], result[1:]
 }

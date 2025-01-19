@@ -15,3 +15,12 @@ func TestParseArgs(t *testing.T) {
 	testutils.ExpectToMatchString(t, args[2], `/tmp/qux/f'\'36`)
 
 }
+
+func TestParseArgs2(t *testing.T) {
+	command, args := parseArgs(`echo \'\"script hello\"\'`)
+	testutils.ExpectToMatchString(t, command, "echo")
+	testutils.ExpectToMatchInt(t, len(args), 2)
+	testutils.ExpectToMatchString(t, args[0], `'"script`)
+	testutils.ExpectToMatchString(t, args[1], `hello"'`)
+
+}
