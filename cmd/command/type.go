@@ -28,10 +28,10 @@ func (t Type) Run(args []string) {
 	}
 	userDefined, isUserDefined := command.(UserDefined)
 	if isUserDefined {
-		fmt.Fprintf(os.Stdout, "%s is %s", userDefined.Name, userDefined.Path)
+		fmt.Fprintf(os.Stdout, "%s is %s\n", userDefined.Name, userDefined.Path)
 	} else {
 
-		fmt.Fprintf(os.Stdout, "%s is a shell builtin", command)
+		fmt.Fprintf(os.Stdout, "%s is a shell builtin\n", command)
 	}
 
 }

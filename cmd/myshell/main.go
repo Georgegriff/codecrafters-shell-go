@@ -22,6 +22,5 @@ func main() {
 		trimmedInput := strings.TrimSuffix(commandInput, "\n")
 		command.ExecuteCommandInput(trimmedInput)
 
-		fmt.Fprintln(os.Stdout)
 	}
 }

@@ -18,5 +18,5 @@ func (e Echo) String() string {
 }
 
 func (e Echo) Run(args []string) {
-	fmt.Fprint(os.Stdout, strings.Join(args, " "))
+	fmt.Fprint(os.Stdout, strings.Join(args, " "), "\n")
 }

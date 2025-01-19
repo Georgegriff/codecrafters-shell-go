@@ -20,7 +20,7 @@ func (u UserDefined) Run(args []string) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		fmt.Fprint(os.Stderr, err.Error())
+		fmt.Printf("%s: command not found\n", u.Name)
 	}
 }
 
