@@ -11,6 +11,7 @@ type CommandType string
 const (
 	EXIT         CommandType = "exit"
 	ECHO         CommandType = "echo"
+	PWD          CommandType = "pwd"
 	TYPE         CommandType = "type"
 	USER_DEFINED CommandType = "user_defined"
 )
@@ -23,6 +24,8 @@ func GetCommand(commandType CommandType) (Command, error) {
 		return Echo{}, nil
 	case TYPE:
 		return Type{}, nil
+	case PWD:
+		return Pwd{}, nil
 	default:
 		// check in path
 		fileInPath, found := utils.FindFileInPath(string(commandType))
