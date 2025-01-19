@@ -25,7 +25,7 @@ func (c Cd) Run(args []string) {
 	}
 	if path != "" {
 		if !utils.DirExists(path) {
-			fmt.Fprintf(os.Stdout, "cd: %s: Not such file or directory\n", path)
+			fmt.Fprintf(os.Stdout, "cd: %s: No such file or directory\n", path)
 			return
 		}
 
