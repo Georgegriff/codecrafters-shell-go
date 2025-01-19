@@ -27,19 +27,19 @@ func ExecuteCommandInput(commandInput string) {
 }
 
 // Horrible had to borrow this
-func parseArgs(input string) (string, []string) {
+func parseArgs(s string) (string, []string) {
 
 	var args []string
-	command, argstr, _ := strings.Cut(input, " ")
-	if strings.Contains(input, "\"") {
+	command, argstr, _ := strings.Cut(s, " ")
+	if strings.Contains(s, "\"") {
 		re := regexp.MustCompile("\"(.*?)\"")
-		args = re.FindAllString(input, -1)
+		args = re.FindAllString(s, -1)
 		for i := range args {
 			args[i] = strings.Trim(args[i], "\"")
 		}
-	} else if strings.Contains(input, "'") {
+	} else if strings.Contains(s, "'") {
 		re := regexp.MustCompile("'(.*?)'")
-		args = re.FindAllString(input, -1)
+		args = re.FindAllString(s, -1)
 		for i := range args {
 			args[i] = strings.Trim(args[i], "'")
 		}
