@@ -9,6 +9,7 @@ import (
 type CommandType string
 
 const (
+	CD           CommandType = "cd"
 	EXIT         CommandType = "exit"
 	ECHO         CommandType = "echo"
 	PWD          CommandType = "pwd"
@@ -26,6 +27,8 @@ func GetCommand(commandType CommandType) (Command, error) {
 		return Type{}, nil
 	case PWD:
 		return Pwd{}, nil
+	case CD:
+		return Cd{}, nil
 	default:
 		// check in path
 		fileInPath, found := utils.FindFileInPath(string(commandType))
