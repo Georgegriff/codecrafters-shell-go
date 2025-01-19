@@ -22,6 +22,18 @@ func ExecuteCommandInput(commandInput string) {
 		fmt.Fprint(os.Stdout, notFoundError, "\n")
 		return
 	}
-	command.Run(arguments)
+	command.Run(prepareArguments(arguments))
 
+}
+
+func prepareArguments(args []string) []string {
+	prepared := []string{}
+
+	for _, arg := range args {
+		removedQuoteStart, _ := strings.CutPrefix(arg, "'")
+		stripped, _ := strings.CutSuffix(removedQuoteStart, "'")
+		prepared = append(prepared, stripped)
+	}
+
+	return prepared
 }

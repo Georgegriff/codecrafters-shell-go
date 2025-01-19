@@ -9,6 +9,7 @@ import (
 type CommandType string
 
 const (
+	CAT          CommandType = "cat"
 	CD           CommandType = "cd"
 	EXIT         CommandType = "exit"
 	ECHO         CommandType = "echo"
@@ -19,6 +20,8 @@ const (
 
 func GetCommand(commandType CommandType) (Command, error) {
 	switch commandType {
+	case CAT:
+		return Cat{}, nil
 	case EXIT:
 		return Exit{}, nil
 	case ECHO:
