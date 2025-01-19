@@ -7,11 +7,14 @@ import (
 )
 
 type Echo struct {
-	BaseCommand
 }
 
 func (e Echo) CommandType() CommandType {
 	return ECHO
+}
+
+func (e Echo) String() string {
+	return string(e.CommandType())
 }
 
 func (e Echo) Run(args []string) {

@@ -6,11 +6,14 @@ import (
 )
 
 type Type struct {
-	BaseCommand
 }
 
 func (t Type) CommandType() CommandType {
 	return TYPE
+}
+
+func (t Type) String() string {
+	return string(t.CommandType())
 }
 
 func (t Type) Run(args []string) {

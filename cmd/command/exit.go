@@ -3,11 +3,14 @@ package command
 import "os"
 
 type Exit struct {
-	BaseCommand
 }
 
 func (e Exit) CommandType() CommandType {
 	return EXIT
+}
+
+func (e Exit) String() string {
+	return string(e.CommandType())
 }
 
 func (e Exit) Run(args []string) {

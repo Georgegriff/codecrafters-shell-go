@@ -1,9 +1,12 @@
 package command
 
 type UserDefined struct {
-	BaseCommand
 	Name string
 	Path string
+}
+
+func (u UserDefined) CommandType() CommandType {
+	return USER_DEFINED
 }
 
 func (u UserDefined) Run(args []string) {
