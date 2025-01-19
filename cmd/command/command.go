@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/mattn/go-shellwords"
 )
 
 type Command interface {
@@ -13,7 +15,7 @@ type Command interface {
 }
 
 func ExecuteCommandInput(commandInput string) {
-	commandParts := strings.Split(commandInput, " ")
+	commandParts := parseArgs(commandInput)
 
 	commandType, arguments := commandParts[0], commandParts[1:]
 	command, err := GetCommand(CommandType(commandType))
@@ -22,18 +24,16 @@ func ExecuteCommandInput(commandInput string) {
 		fmt.Fprint(os.Stdout, notFoundError, "\n")
 		return
 	}
-	command.Run(prepareArguments(arguments))
+	command.Run(arguments)
 
 }
 
-func prepareArguments(args []string) []string {
-	prepared := []string{}
+func parseArgs(input string) []string {
 
-	for _, arg := range args {
-		removedQuoteStart, _ := strings.CutPrefix(arg, "'")
-		stripped, _ := strings.CutSuffix(removedQuoteStart, "'")
-		prepared = append(prepared, stripped)
-	}
+	p := shellwords.NewParser()
+	p.ParseBacktick = true
 
-	return prepared
+	args, _ := p.Parse(input)
+
+	return args
 }

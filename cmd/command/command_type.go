@@ -20,8 +20,9 @@ const (
 
 func GetCommand(commandType CommandType) (Command, error) {
 	switch commandType {
-	case CAT:
-		return Cat{}, nil
+	// Disable cat for now because codecrafters test fail with it
+	// case CAT:
+	// 	return Cat{}, nil
 	case EXIT:
 		return Exit{}, nil
 	case ECHO:
